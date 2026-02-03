@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1200px; height: 800px; overflow: hidden; background: #0a0a0f; }
+  .cover {
+    width: 1200px; height: 800px; position: relative; overflow: hidden;
+    background: linear-gradient(175deg, #0a0a0f 0%, #111118 30%, #1a1520 55%, #2a1f1a 75%, #3d2b1f 90%, #4a3525 100%);
+  }
+
+  /* ─── AMBIENT GLOW LAYERS ─── */
+  .glow-top {
+    position: absolute; top: -120px; left: 50%; transform: translateX(-50%);
+    width: 900px; height: 500px;
+    background: radial-gradient(ellipse at center, rgba(212,175,110,0.18) 0%, rgba(180,140,80,0.06) 40%, transparent 70%);
+    filter: blur(40px);
+  }
+  .glow-mid {
+    position: absolute; top: 200px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 400px;
+    background: radial-gradient(ellipse at center, rgba(180,140,80,0.10) 0%, transparent 65%);
+    filter: blur(30px);
+  }
+  .glow-bottom {
+    position: absolute; bottom: -80px; left: 50%; transform: translateX(-50%);
+    width: 1000px; height: 300px;
+    background: radial-gradient(ellipse at center, rgba(60,40,30,0.5) 0%, transparent 70%);
+    filter: blur(25px);
+  }
+
+  /* ─── PARTICLE FIELD ─── */
+  .particle {
+    position: absolute; border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,175,110,0.9) 0%, transparent 70%);
+    animation: float 6s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) scale(1); opacity: 0.4; }
+    50% { transform: translateY(-12px) scale(1.1); opacity: 0.9; }
+  }
+
+  /* ─── BRANCH / ROOT SYSTEM (SVG) ─── */
+  .branch-svg {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+  }
+
+  /* ─── PHASE LABELS ─── */
+  .phase {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 16px;
+    z-index: 10;
+  }
+  .phase-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    box-shadow: 0 0 12px 4px currentColor;
+    flex-shrink: 0;
+  }
+  .phase-label {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    letter-spacing: 3.5px; text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  .phase-survival { top: 640px; }
+  .phase-survival .phase-dot { background: #c47a5a; color: #c47a5a; }
+  .phase-survival .phase-label { font-size: 13px; color: rgba(196,122,90,0.85); }
+
+  .phase-sustaining { top: 510px; }
+  .phase-sustaining .phase-dot { background: #7aaa8a; color: #7aaa8a; }
+  .phase-sustaining .phase-label { font-size: 14px; color: rgba(122,170,138,0.85); }
+
+  .phase-living { top: 355px; }
+  .phase-living .phase-dot { background: #a8c4d4; color: #a8c4d4; }
+  .phase-living .phase-label { font-size: 15px; color: rgba(168,196,212,0.9); }
+
+  .phase-thriving { top: 175px; }
+  .phase-thriving .phase-dot { background: #d4af6e; color: #d4af6e; }
+  .phase-thriving .phase-label { font-size: 17px; color: rgba(212,175,110,0.95); }
+
+  /* ─── TITLE ─── */
+  .title-block {
+    position: absolute; top: 52px; left: 0; right: 0;
+    text-align: center; z-index: 10;
+  }
+  .title-main {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: 38px; font-weight: 400; line-height: 1.25;
+    color: #f0e6d3;
+    text-shadow: 0 2px 30px rgba(0,0,0,0.6);
+    max-width: 780px; margin: 0 auto;
+  }
+  .title-main em { font-style: italic; color: #d4af6e; }
+
+  /* ─── BYLINE ─── */
+  .byline {
+    position: absolute; bottom: 38px; left: 0; right: 0;
+    text-align: center; z-index: 10;
+  }
+  .byline-text {
+    font-family: 'Georgia', serif;
+    font-size: 13px; color: rgba(200,190,175,0.55);
+    letter-spacing: 2px; text-transform: uppercase;
+  }
+  .byline-logo {
+    font-family: 'Georgia', serif;
+    font-size: 15px; color: rgba(212,175,110,0.5);
+    letter-spacing: 4px; text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  /* ─── SUBTLE GRAIN OVERLAY ─── */
+  .grain {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    opacity: 0.035; pointer-events: none; z-index: 5;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+  }
+
+  /* ─── HORIZONTAL RULE ACCENT ─── */
+  .hr-accent {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    width: 60px; height: 1px; background: rgba(212,175,110,0.3);
+    z-index: 10;
+  }
+  .hr-top { top: 138px; }
+  .hr-bottom { bottom: 72px; }
+
+</style>
+</head>
+<body>
+<div class="cover">
+
+  <!-- Ambient glows -->
+  <div class="glow-top"></div>
+  <div class="glow-mid"></div>
+  <div class="glow-bottom"></div>
+
+  <!-- Branch/root system SVG -->
+  <svg class="branch-svg" viewBox="0 0 1200 800" preserveAspectRatio="none">
+    <defs>
+      <!-- Vertical glow gradient for branches -->
+      <linearGradient id="branchGrad" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0%" stop-color="#c47a5a" stop-opacity="0.0"/>
+        <stop offset="25%" stop-color="#c47a5a" stop-opacity="0.25"/>
+        <stop offset="45%" stop-color="#7aaa8a" stop-opacity="0.3"/>
+        <stop offset="65%" stop-color="#a8c4d4" stop-opacity="0.3"/>
+        <stop offset="85%" stop-color="#d4af6e" stop-opacity="0.4"/>
+        <stop offset="100%" stop-color="#d4af6e" stop-opacity="0.15"/>
+      </linearGradient>
+      <linearGradient id="branchGradFaint" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0%" stop-color="#c47a5a" stop-opacity="0.0"/>
+        <stop offset="30%" stop-color="#7aaa8a" stop-opacity="0.12"/>
+        <stop offset="60%" stop-color="#a8c4d4" stop-opacity="0.15"/>
+        <stop offset="100%" stop-color="#d4af6e" stop-opacity="0.1"/>
+      </linearGradient>
+      <!-- Glow filter for nodes -->
+      <filter id="nodeGlow" x="-100%" y="-100%" width="300%" height="300%">
+        <feGaussianBlur stdDeviation="4" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="2"/>
+      </filter>
+    </defs>
+
+    <!-- Main trunk -->
+    <path d="M600,720 C600,680 598,640 600,580 C602,520 600,460 600,400 C600,340 601,280 600,220 C599,180 600,160 600,140"
+          stroke="url(#branchGrad)" stroke-width="2" fill="none" opacity="0.7"/>
+
+    <!-- Primary branches LEFT -->
+    <path d="M600,580 C580,560 545,540 500,520" stroke="url(#branchGrad)" stroke-width="1.5" fill="none" opacity="0.55"/>
+    <path d="M600,460 C565,440 520,415 470,400" stroke="url(#branchGrad)" stroke-width="1.5" fill="none" opacity="0.5"/>
+    <path d="M600,350 C570,330 530,305 480,290" stroke="url(#branchGrad)" stroke-width="1.4" fill="none" opacity="0.5"/>
+    <path d="M600,250 C575,235 540,215 495,205" stroke="url(#branchGrad)" stroke-width="1.2" fill="none" opacity="0.45"/>
+
+    <!-- Primary branches RIGHT -->
+    <path d="M600,580 C622,558 660,538 710,522" stroke="url(#branchGrad)" stroke-width="1.5" fill="none" opacity="0.55"/>
+    <path d="M600,460 C638,442 685,418 735,405" stroke="url(#branchGrad)" stroke-width="1.5" fill="none" opacity="0.5"/>
+    <path d="M600,350 C633,332 675,308 728,295" stroke="url(#branchGrad)" stroke-width="1.4" fill="none" opacity="0.5"/>
+    <path d="M600,250 C628,237 665,218 712,208" stroke="url(#branchGrad)" stroke-width="1.2" fill="none" opacity="0.45"/>
+
+    <!-- Secondary branches LEFT -->
+    <path d="M500,520 C475,508 445,500 410,498" stroke="url(#branchGradFaint)" stroke-width="1" fill="none" opacity="0.4"/>
+    <path d="M470,400 C440,388 405,380 365,382" stroke="url(#branchGradFaint)" stroke-width="1" fill="none" opacity="0.35"/>
+    <path d="M480,290 C450,278 415,270 375,275" stroke="url(#branchGradFaint)" stroke-width="1" fill="none" opacity="0.35"/>
+    <path d="M495,205 C465,195 428,190 385,195" stroke="url(#branchGradFaint)" stroke-width="0.9" fill="none" opacity="0.3"/>
+
+    <!-- Secondary branches RIGHT -->
+    <path d="M710,522 C738,510 770,502 805,500" stroke="url(#branchGradFaint)" stroke-width="1" fill="none" opacity="0.4"/>
+    <path d="M735,405 C765,393 800,386 840,388" stroke="url(#branchGradFaint)" stroke-width="1" fill="none" opacity="0.35"/>
+    <path d="M728,295 C758,283 795,276 840,280" stroke="url(#branchGradFaint)" stroke-width="1" fill="none" opacity="0.35"/>
+    <path d="M712,208 C745,198 782,193 830,198" stroke="url(#branchGradFaint)" stroke-width="0.9" fill="none" opacity="0.3"/>
+
+    <!-- Far secondary branches -->
+    <path d="M410,498 C380,492 350,490 320,494" stroke="url(#branchGradFaint)" stroke-width="0.7" fill="none" opacity="0.25"/>
+    <path d="M365,382 C335,378 305,380 275,386" stroke="url(#branchGradFaint)" stroke-width="0.7" fill="none" opacity="0.22"/>
+    <path d="M805,500 C838,494 868,492 900,496" stroke="url(#branchGradFaint)" stroke-width="0.7" fill="none" opacity="0.25"/>
+    <path d="M840,388 C872,384 902,386 935,392" stroke="url(#branchGradFaint)" stroke-width="0.7" fill="none" opacity="0.22"/>
+
+    <!-- Tertiary tips (tiny) -->
+    <path d="M375,275 C350,268 322,264 295,270" stroke="url(#branchGradFaint)" stroke-width="0.6" fill="none" opacity="0.2"/>
+    <path d="M840,280 C868,274 898,270 928,276" stroke="url(#branchGradFaint)" stroke-width="0.6" fill="none" opacity="0.2"/>
+    <path d="M385,195 C358,190 328,188 298,194" stroke="url(#branchGradFaint)" stroke-width="0.6" fill="none" opacity="0.18"/>
+    <path d="M830,198 C860,193 892,191 925,197" stroke="url(#branchGradFaint)" stroke-width="0.6" fill="none" opacity="0.18"/>
+
+    <!-- ─── NODES (glowing dots at junctions) ─── -->
+    <!-- Survival layer (warm amber-red) -->
+    <circle cx="600" cy="580" r="3.5" fill="#c47a5a" filter="url(#nodeGlow)" opacity="0.85"/>
+    <circle cx="500" cy="520" r="2.5" fill="#c47a5a" filter="url(#nodeGlow)" opacity="0.6"/>
+    <circle cx="710" cy="522" r="2.5" fill="#c47a5a" filter="url(#nodeGlow)" opacity="0.6"/>
+    <circle cx="410" cy="498" r="1.8" fill="#c47a5a" opacity="0.4"/>
+    <circle cx="805" cy="500" r="1.8" fill="#c47a5a" opacity="0.4"/>
+
+    <!-- Sustaining layer (green) -->
+    <circle cx="600" cy="460" r="3.5" fill="#7aaa8a" filter="url(#nodeGlow)" opacity="0.85"/>
+    <circle cx="470" cy="400" r="2.5" fill="#7aaa8a" filter="url(#nodeGlow)" opacity="0.6"/>
+    <circle cx="735" cy="405" r="2.5" fill="#7aaa8a" filter="url(#nodeGlow)" opacity="0.6"/>
+    <circle cx="365" cy="382" r="1.8" fill="#7aaa8a" opacity="0.4"/>
+    <circle cx="840" cy="388" r="1.8" fill="#7aaa8a" opacity="0.4"/>
+
+    <!-- Living layer (blue) -->
+    <circle cx="600" cy="350" r="3.5" fill="#a8c4d4" filter="url(#nodeGlow)" opacity="0.85"/>
+    <circle cx="480" cy="290" r="2.5" fill="#a8c4d4" filter="url(#nodeGlow)" opacity="0.6"/>
+    <circle cx="728" cy="295" r="2.5" fill="#a8c4d4" filter="url(#nodeGlow)" opacity="0.6"/>
+    <circle cx="375" cy="275" r="1.8" fill="#a8c4d4" opacity="0.4"/>
+    <circle cx="840" cy="280" r="1.8" fill="#a8c4d4" opacity="0.4"/>
+
+    <!-- Thriving layer (gold) -->
+    <circle cx="600" cy="250" r="4" fill="#d4af6e" filter="url(#nodeGlow)" opacity="0.9"/>
+    <circle cx="495" cy="205" r="2.8" fill="#d4af6e" filter="url(#nodeGlow)" opacity="0.65"/>
+    <circle cx="712" cy="208" r="2.8" fill="#d4af6e" filter="url(#nodeGlow)" opacity="0.65"/>
+    <circle cx="385" cy="195" r="2" fill="#d4af6e" opacity="0.45"/>
+    <circle cx="830" cy="198" r="2" fill="#d4af6e" opacity="0.45"/>
+
+    <!-- Apex bloom -->
+    <circle cx="600" cy="155" r="5" fill="#d4af6e" filter="url(#nodeGlow)" opacity="0.7"/>
+    <circle cx="600" cy="155" r="2.5" fill="#f0e6d3" opacity="0.9"/>
+
+    <!-- Tiny tip nodes -->
+    <circle cx="320" cy="494" r="1.2" fill="#c47a5a" opacity="0.3"/>
+    <circle cx="900" cy="496" r="1.2" fill="#c47a5a" opacity="0.3"/>
+    <circle cx="275" cy="386" r="1.2" fill="#7aaa8a" opacity="0.28"/>
+    <circle cx="935" cy="392" r="1.2" fill="#7aaa8a" opacity="0.28"/>
+    <circle cx="295" cy="270" r="1.2" fill="#a8c4d4" opacity="0.28"/>
+    <circle cx="928" cy="276" r="1.2" fill="#a8c4d4" opacity="0.28"/>
+    <circle cx="298" cy="194" r="1.2" fill="#d4af6e" opacity="0.25"/>
+    <circle cx="925" cy="197" r="1.2" fill="#d4af6e" opacity="0.25"/>
+
+  </svg>
+
+  <!-- Particles -->
+  <div class="particle" style="width:3px;height:3px;top:180px;left:320px;animation-delay:0s;"></div>
+  <div class="particle" style="width:2px;height:2px;top:240px;left:780px;animation-delay:1.2s;"></div>
+  <div class="particle" style="width:4px;height:4px;top:310px;left:200px;animation-delay:2.5s;"></div>
+  <div class="particle" style="width:2px;height:2px;top:420px;left:900px;animation-delay:0.8s;"></div>
+  <div class="particle" style="width:3px;height:3px;top:500px;left:150px;animation-delay:3.2s;"></div>
+  <div class="particle" style="width:2px;height:2px;top:160px;left:950px;animation-delay:1.8s;"></div>
+  <div class="particle" style="width:3px;height:3px;top:380px;left:1020px;animation-delay:2.1s;"></div>
+  <div class="particle" style="width:2px;height:2px;top:550px;left:250px;animation-delay:0.5s;"></div>
+  <div class="particle" style="width:4px;height:4px;top:200px;left:500px;animation-delay:4s;"></div>
+  <div class="particle" style="width:2px;height:2px;top:460px;left:680px;animation-delay:2.8s;"></div>
+  <div class="particle" style="width:3px;height:3px;top:270px;left:100px;animation-delay:1.5s;"></div>
+  <div class="particle" style="width:2px;height:2px;top:600px;left:850px;animation-delay:3.7s;"></div>
+
+  <!-- Phase labels -->
+  <div class="phase phase-survival">
+    <div class="phase-dot"></div>
+    <div class="phase-label">Survival</div>
+  </div>
+  <div class="phase phase-sustaining">
+    <div class="phase-dot"></div>
+    <div class="phase-label">Sustaining</div>
+  </div>
+  <div class="phase phase-living">
+    <div class="phase-dot"></div>
+    <div class="phase-label">Living</div>
+  </div>
+  <div class="phase phase-thriving">
+    <div class="phase-dot"></div>
+    <div class="phase-label">Thriving</div>
+  </div>
+
+  <!-- Title -->
+  <div class="title-block">
+    <div class="title-main">When Safety Breaks,<br>the Future Can't <em>Breathe</em></div>
+  </div>
+
+  <!-- Accent rules -->
+  <div class="hr-accent hr-top"></div>
+  <div class="hr-accent hr-bottom"></div>
+
+  <!-- Byline -->
+  <div class="byline">
+    <div class="byline-text">Heidi Cuppari &nbsp;·&nbsp; Dream Tank</div>
+  </div>
+
+  <!-- Grain -->
+  <div class="grain"></div>
+
+</div>
+</body>
+</html>
