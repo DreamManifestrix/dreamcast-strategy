@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DreamCast Follow-Up Email Strategy</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #0f1117;
+    color: #e2e4e9;
+    min-height: 100vh;
+  }
+
+  /* ─── TOP NAV ─── */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(15,17,23,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #2a2d36;
+    display: flex; gap: 4px; padding: 10px 20px;
+    flex-wrap: wrap;
+  }
+  .nav button {
+    background: transparent; border: 1px solid #2a2d36;
+    color: #9ca3af; padding: 6px 14px; border-radius: 20px;
+    font-size: 13px; cursor: pointer; transition: all 0.2s;
+    font-family: inherit;
+  }
+  .nav button:hover { border-color: #6c63ff; color: #c4b5fd; }
+  .nav button.active { background: #6c63ff; border-color: #6c63ff; color: #fff; font-weight: 600; }
+
+  /* ─── SECTIONS (hidden by default) ─── */
+  .section { display: none; padding: 32px 24px; max-width: 860px; margin: 0 auto; animation: fadeIn 0.3s ease; }
+  .section.visible { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ─── TYPOGRAPHY ─── */
+  .section-badge {
+    display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: #6c63ff; margin-bottom: 10px;
+  }
+  h1 { font-size: 26px; font-weight: 700; color: #fff; margin-bottom: 6px; line-height: 1.3; }
+  h2 { font-size: 20px; font-weight: 600; color: #fff; margin: 28px 0 10px; }
+  h3 { font-size: 15px; font-weight: 600; color: #c4b5fd; margin: 20px 0 8px; }
+  p { font-size: 14px; line-height: 1.7; color: #9ca3af; margin-bottom: 12px; }
+  .subtitle { font-size: 15px; color: #6b7280; margin-bottom: 24px; line-height: 1.5; }
+
+  /* ─── STRATEGY CARDS ─── */
+  .strategy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin: 20px 0; }
+  .strategy-card {
+    background: #161821; border: 1px solid #2a2d36; border-radius: 12px; padding: 20px;
+    transition: border-color 0.2s;
+  }
+  .strategy-card:hover { border-color: #6c63ff44; }
+  .strategy-card .card-num { font-size: 11px; font-weight: 700; color: #6c63ff; letter-spacing: 1px; margin-bottom: 8px; }
+  .strategy-card .card-title { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+  .strategy-card p { font-size: 13px; margin-bottom: 0; }
+
+  /* ─── EMAIL BLOCKS ─── */
+  .email-wrapper {
+    background: #161821; border: 1px solid #2a2d36; border-radius: 14px;
+    overflow: hidden; margin: 20px 0;
+  }
+  .email-header {
+    background: #1c1f2a; padding: 16px 22px; border-bottom: 1px solid #2a2d36;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .email-header .label { font-size: 12px; color: #6b7280; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+  .email-header .copy-btn {
+    background: #6c63ff22; border: 1px solid #6c63ff44; color: #c4b5fd;
+    padding: 5px 12px; border-radius: 6px; font-size: 12px; cursor: pointer;
+    font-family: inherit; transition: background 0.2s;
+  }
+  .email-header .copy-btn:hover { background: #6c63ff44; }
+  .email-meta { padding: 14px 22px; border-bottom: 1px solid #1e2130; font-size: 13px; color: #6b7280; }
+  .email-meta span { color: #9ca3af; font-weight: 500; }
+  .email-body { padding: 24px 22px; }
+  .email-body .subj-line { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid #2a2d36; }
+  .email-body p { font-size: 14px; line-height: 1.8; color: #b0b5c0; margin-bottom: 14px; }
+  .email-body .greeting { color: #fff; font-weight: 600; font-size: 15px; }
+  .email-body .sign { color: #9ca3af; margin-top: 24px; padding-top: 16px; border-top: 1px solid #2a2d36; font-size: 13px; }
+  .email-body .sign strong { color: #d1d5db; }
+
+  /* ─── CTA BLOCK ─── */
+  .cta-block {
+    background: linear-gradient(135deg, #1a1730 0%, #16182a 100%);
+    border: 1px solid #6c63ff33; border-radius: 10px;
+    padding: 18px 20px; margin: 16px 0; text-align: center;
+  }
+  .cta-block p { font-size: 15px; color: #c4b5fd; font-weight: 600; margin-bottom: 4px; }
+  .cta-block .cta-sub { font-size: 12px; color: #6b7280; font-weight: 400; margin-bottom: 0; }
+
+  /* ─── TIMESTAMP TABLE ─── */
+  .ts-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  .ts-table th {
+    text-align: left; font-size: 11px; font-weight: 700; color: #6c63ff;
+    letter-spacing: 1px; text-transform: uppercase; padding: 10px 14px;
+    border-bottom: 1px solid #2a2d36; background: #161821;
+  }
+  .ts-table td { padding: 12px 14px; border-bottom: 1px solid #1e2130; vertical-align: top; }
+  .ts-table tr:hover td { background: #1c1f2a; }
+  .ts-time { font-size: 13px; color: #6c63ff; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .ts-title { font-size: 14px; color: #fff; font-weight: 600; }
+  .ts-desc { font-size: 13px; color: #6b7280; margin-top: 3px; line-height: 1.5; }
+  .ts-highlight { border-left: 3px solid #6c63ff; }
+  .ts-highlight td { background: #1a1730; }
+
+  /* ─── AUDIENCE BREAKDOWN ─── */
+  .audience-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+  .aud-card { background: #161821; border: 1px solid #2a2d36; border-radius: 10px; padding: 18px; text-align: center; }
+  .aud-card .aud-num { font-size: 28px; font-weight: 800; color: #fff; }
+  .aud-card .aud-label { font-size: 12px; color: #6b7280; margin-top: 4px; }
+  .aud-card .aud-action { font-size: 12px; color: #c4b5fd; margin-top: 8px; font-weight: 600; }
+
+  /* ─── NOTES / TIPS ─── */
+  .tip-box {
+    background: #1a1e2e; border-left: 3px solid #6c63ff; border-radius: 0 8px 8px 0;
+    padding: 14px 18px; margin: 16px 0;
+  }
+  .tip-box .tip-label { font-size: 11px; font-weight: 700; color: #6c63ff; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .tip-box p { font-size: 13px; color: #9ca3af; margin-bottom: 6px; }
+  .tip-box p:last-child { margin-bottom: 0; }
+
+  .warning-box {
+    background: #2a1f1a; border-left: 3px solid #f59e0b; border-radius: 0 8px 8px 0;
+    padding: 14px 18px; margin: 16px 0;
+  }
+  .warning-box .tip-label { color: #f59e0b; }
+
+  /* ─── CHECKLIST ─── */
+  .checklist { margin: 12px 0; }
+  .checklist label {
+    display: flex; align-items: flex-start; gap: 10px; padding: 8px 0;
+    font-size: 14px; color: #9ca3af; cursor: pointer; border-bottom: 1px solid #1e2130;
+  }
+  .checklist label:last-child { border-bottom: none; }
+  .checklist input[type="checkbox"] {
+    appearance: none; width: 18px; height: 18px; border: 2px solid #2a2d36;
+    border-radius: 4px; flex-shrink: 0; margin-top: 1px; cursor: pointer;
+    background: #161821; transition: all 0.15s;
+  }
+  .checklist input[type="checkbox"]:checked { background: #6c63ff; border-color: #6c63ff; }
+  .checklist input[type="checkbox"]:checked + span { color: #6b7280; text-decoration: line-through; }
+  .checklist span { line-height: 1.5; }
+
+  /* ─── SUBJECT LINE OPTIONS ─── */
+  .subj-options { margin: 12px 0; }
+  .subj-option {
+    background: #161821; border: 1px solid #2a2d36; border-radius: 8px;
+    padding: 12px 16px; margin: 6px 0; display: flex; justify-content: space-between;
+    align-items: center; cursor: pointer; transition: border-color 0.2s;
+  }
+  .subj-option:hover { border-color: #6c63ff44; }
+  .subj-option .subj-text { font-size: 14px; color: #fff; font-weight: 500; }
+  .subj-option .subj-tag { font-size: 11px; color: #6c63ff; font-weight: 600; letter-spacing: 0.5px; }
+
+  /* ─── DIVIDER ─── */
+  .divider { height: 1px; background: #2a2d36; margin: 28px 0; }
+
+  /* ─── COPY FEEDBACK ─── */
+  .copied-toast {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    background: #6c63ff; color: #fff; padding: 10px 24px; border-radius: 24px;
+    font-size: 14px; font-weight: 600; opacity: 0; transition: opacity 0.3s;
+    pointer-events: none; z-index: 999;
+  }
+  .copied-toast.show { opacity: 1; }
+
+  @media (max-width: 600px) {
+    .audience-grid { grid-template-columns: 1fr; }
+    .strategy-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="active" onclick="show('strategy')">📋 Strategy</button>
+  <button onclick="show('zoom-email')">💌 Zoom Attendees</button>
+  <button onclick="show('flodesk-email')">📧 Flodesk Blast</button>
+  <button onclick="show('timestamps')">⏱️ Replay Guide</button>
+  <button onclick="show('checklist')">✅ Launch Checklist</button>
+</nav>
+
+<!-- TOAST -->
+<div class="copied-toast" id="toast">Copied to clipboard!</div>
+
+<!-- ━━━━━━━━━━━━━━━━ STRATEGY ━━━━━━━━━━━━━━━━ -->
+<div class="section visible" id="strategy">
+  <div class="section-badge">Email Strategy</div>
+  <h1>DreamCast Follow-Up Plan</h1>
+  <p class="subtitle">You're 17 days post-broadcast with real momentum. Here's how to turn that into commitments — segmented by audience, with one clear CTA per segment.</p>
+
+  <h2>Your Audiences</h2>
+  <div class="audience-grid">
+    <div class="aud-card">
+      <div class="aud-num">~50</div>
+      <div class="aud-label">Zoom Attendees</div>
+      <div class="aud-action">→ Warm, personal. High intent.</div>
+    </div>
+    <div class="aud-card">
+      <div class="aud-num">~250</div>
+      <div class="aud-label">YouTube Livestream</div>
+      <div class="aud-action">→ Reach via social + replay links</div>
+    </div>
+    <div class="aud-card">
+      <div class="aud-num">~1,300</div>
+      <div class="aud-label">Dream Tank List</div>
+      <div class="aud-action">→ Flodesk blast. Re-engage.</div>
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <div class="tip-label">⚡ Key Insight</div>
+    <p>Your 250 YouTube watchers are your warmest "unknown" audience. The replay email + social posts are how you pull them into the funnel. Every link back to the replay is a chance to capture them. Make the replay page itself a landing moment — not just a video.</p>
+  </div>
+
+  <h2>The Play: One CTA Per Segment</h2>
+  <div class="strategy-grid">
+    <div class="strategy-card">
+      <div class="card-num">01 — ZOOM LIST</div>
+      <div class="card-title">Watch the replay with you</div>
+      <p>They were there live. The replay link + timestamps let them revisit the moments that moved them. CTA: <strong style="color:#c4b5fd">Book a 30-min City Ignition Call.</strong></p>
+    </div>
+    <div class="strategy-card">
+      <div class="card-num">02 — FLODESK LIST</div>
+      <div class="card-title">See what happened</div>
+      <p>Most haven't seen DreamCast at all. This is an introduction + invitation. CTA: <strong style="color:#c4b5fd">Watch the replay</strong> (get them to the page).</p>
+    </div>
+    <div class="strategy-card">
+      <div class="card-num">03 — SOCIAL</div>
+      <div class="card-title">Catch the YouTube watchers</div>
+      <p>Post 2–3 short clips with the replay link. Caption = one sentence from a student. CTA: <strong style="color:#c4b5fd">Watch the full broadcast.</strong></p>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-label">💡 Why this works</div>
+    <p>You don't need 5 CTAs. You need the right one CTA for each person's place in the journey. The Zoom folks are ready to act — give them a call to book. The list folks need to see first — give them the replay. Social catches the in-betweeners.</p>
+    <p>The replay page itself becomes your conversion point. Everything funnels there.</p>
+  </div>
+</div>
+
+<!-- ━━━━━━━━━━━━━━━━ ZOOM FOLLOW-UP ━━━━━━━━━━━━━━━━ -->
+<div class="section" id="zoom-email">
+  <div class="section-badge">Email 1 of 2</div>
+  <h1>Zoom Attendees Email</h1>
+  <p class="subtitle">~50 people. They were in the room. They felt it. This email thanks them, gives them the replay with timestamps so they can rewatch what moved them, and asks for one thing.</p>
+
+  <h2>Subject Line Options</h2>
+  <div class="subj-options">
+    <div class="subj-option">
+      <span class="subj-text">The replay is here — and so is the next step</span>
+      <span class="subj-tag">RECOMMENDED</span>
+    </div>
+    <div class="subj-option">
+      <span class="subj-text">You were there. Here's what comes next.</span>
+      <span class="subj-tag">PERSONAL</span>
+    </div>
+    <div class="subj-option">
+      <span class="subj-text">Replay + timestamps: revisit DreamCast</span>
+      <span class="subj-tag">DIRECT</span>
+    </div>
+  </div>
+
+  <div class="email-wrapper">
+    <div class="email-header">
+      <span class="label">Zoom Attendees — Full Email</span>
+      <button class="copy-btn" onclick="copyEmail('zoom-body')">Copy Email</button>
+    </div>
+    <div class="email-meta">
+      <strong style="color:#9ca3af">To:</strong> Zoom Attendees (~50) &nbsp;|&nbsp;
+      <strong style="color:#9ca3af">From:</strong> Adrienne + Heidi &nbsp;|&nbsp;
+      <strong style="color:#9ca3af">Tone:</strong> Warm, grateful, forward-moving
+    </div>
+    <div class="email-body" id="zoom-body">
+      <div class="subj-line">The replay is here — and so is the next step</div>
+      <p class="greeting">Hey [First Name],</p>
+      <p>Thank you for being in the room on January 17th. Not just watching — <em>being there</em>. The energy you brought, the questions you asked, the way you showed up — that's what made DreamCast more than a presentation. It made it a moment.</p>
+      <p>We've been asked again and again: <strong style="color:#fff">where's the replay?</strong> It's here.</p>
+
+      <div class="cta-block">
+        <p>🎬 Watch the DreamCast Replay</p>
+        <p class="cta-sub">[REPLAY LINK] — 1 hr 45 min | Timestamped below</p>
+      </div>
+
+      <p>We broke it into chapters so you can jump straight to the moments that matter most to you — whether that's the students sharing their stories, Mayor Weinberg's vision for Golden, the live tools demo, or the blueprint that three mayors have already said yes to.</p>
+
+      <p><strong style="color:#fff">Here's where to jump in:</strong></p>
+      <p style="font-size:13px; color:#6b7280; font-style:italic;">(See the Replay Guide tab for the full timestamped breakdown — or paste the timestamps below into your email)</p>
+
+      <p style="font-size:13px; color:#9ca3af; line-height:2;">
+        <strong style="color:#fff;">00:00 – 00:06</strong> Welcome + the Heal, Dream, Build arc<br>
+        <strong style="color:#fff;">00:06 – 00:18</strong> How we got here + student voices (healing)<br>
+        <strong style="color:#fff;">00:18 – 00:31</strong> Interactive healing + Dream Tank's story<br>
+        <strong style="color:#fff;">00:31 – 00:52</strong> Jenny's safety app + Mayor Weinberg + city vision<br>
+        <strong style="color:#fff;">00:52 – 01:09</strong> Hero's Journey + Heal Dream Build framework<br>
+        <strong style="color:#fff;">01:09 – 01:24</strong> Live tools demo + Youth-Powered Cities Blueprint<br>
+        <strong style="color:#fff;">01:24 – 01:45</strong> Q&amp;A + closing + what's next
+      </p>
+
+      <p>Now — here's what we're building next, and we want you to be part of it.</p>
+      <p>We're activating city labs in <strong style="color:#fff">Providence, Boulder, and Golden</strong> this spring. We need <strong style="color:#fff">12 intergenerational stewards</strong> and <strong style="color:#fff">4 city liaisons</strong> — people who believe young people can co-design the future of their communities. And we need to seed a <strong style="color:#fff">$33k ignition fund</strong> to make it real.</p>
+
+      <div class="cta-block">
+        <p>📞 Join a 30-Minute City Ignition Call</p>
+        <p class="cta-sub">Pick a time that works: [CALENDAR LINK]<br>Feb 10 at 11am MT &nbsp;|&nbsp; Feb 12 at 2pm MT &nbsp;|&nbsp; Feb 14 at 10am MT</p>
+      </div>
+
+      <p>Whether you're a potential city partner, a funder, a mentor, or just someone who felt the spark on Jan 17th — this call is for you. 30 minutes. No pitch deck. Just a real conversation about what's possible.</p>
+      <p>Thank you for being part of this signal.</p>
+
+      <div class="sign">
+        <strong>With gratitude and momentum,<br>Adrienne + Heidi</strong><br>
+        Dream Tank Team<br><br>
+        <span style="color:#6b7280;">[Website] | [Instagram] | [LinkedIn] | [Contact]</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ━━━━━━━━━━━━━━━━ FLODESK BLAST ━━━━━━━━━━━━━━━━ -->
+<div class="section" id="flodesk-email">
+  <div class="section-badge">Email 2 of 2</div>
+  <h1>Flodesk Blast — Dream Tank List</h1>
+  <p class="subtitle">~1,300 people. Most haven't seen DreamCast. This is an introduction, not a follow-up. The tone is invitational — "something incredible happened, and you can be part of what's next." One CTA: watch the replay.</p>
+
+  <h2>Subject Line Options</h2>
+  <div class="subj-options">
+    <div class="subj-option">
+      <span class="subj-text">Something shifted on January 17th</span>
+      <span class="subj-tag">RECOMMENDED</span>
+    </div>
+    <div class="subj-option">
+      <span class="subj-text">Young people just pitched 3 mayors. Watch.</span>
+      <span class="subj-tag">HOOK</span>
+    </div>
+    <div class="subj-option">
+      <span class="subj-text">The first DreamCast — and what it means for you</span>
+      <span class="subj-tag">CURIOUS</span>
+    </div>
+  </div>
+
+  <div class="email-wrapper">
+    <div class="email-header">
+      <span class="label">Flodesk Blast — Full Email</span>
+      <button class="copy-btn" onclick="copyEmail('flodesk-body')">Copy Email</button>
+    </div>
+    <div class="email-meta">
+      <strong style="color:#9ca3af">To:</strong> Dream Tank List (~1,300) &nbsp;|&nbsp;
+      <strong style="color:#9ca3af">From:</strong> Adrienne + Heidi &nbsp;|&nbsp;
+      <strong style="color:#9ca3af">Tone:</strong> Warm, story-driven, low-pressure
+    </div>
+    <div class="email-body" id="flodesk-body">
+      <div class="subj-line">Something shifted on January 17th</div>
+      <p class="greeting">Hey [First Name],</p>
+      <p>On January 17th, six college students did something that doesn't happen often. They took two weeks of work — built in the middle of a crisis — and turned it into something real.</p>
+      <p>They called it <strong style="color:#fff">DreamCast</strong>. And it changed the room.</p>
+      <p>Here's what happened: A group of Brown University students joined Dream Tank's Systems Change Lab. In just 14 days, they built a framework for how cities can put young people at the center of real decision-making. They prototyped a campus safety app. They presented a blueprint — live — to the mayors of <strong style="color:#fff">Golden, Boulder, and Providence</strong>. All three mayors said yes.</p>
+
+      <div class="cta-block">
+        <p>🎬 Watch the DreamCast Replay</p>
+        <p class="cta-sub">[REPLAY LINK] — 1 hr 45 min | Free to watch</p>
+      </div>
+
+      <p>This isn't a polished corporate presentation. It's a youth-led broadcast — raw, honest, and full of the kind of energy that happens when young people are actually trusted to design the future.</p>
+      <p>You'll hear students talk about what it felt like to be on a college campus when a shooting happened — and how they chose to respond by building, not just grieving. You'll meet Mayor Laura Weinberg of Golden talk about her dream for her city. You'll see live tools that anyone — youth, educators, cities — can use right now.</p>
+      <p>And at the end, you'll understand why Dream Tank is doing what it's doing in 2026 — and how you might be part of it.</p>
+
+      <div class="cta-block">
+        <p>👉 Watch the replay and see for yourself</p>
+        <p class="cta-sub">[REPLAY LINK]</p>
+      </div>
+
+      <p>We're not asking you to do anything right now except watch. But if something moves you — if you have a city, a school, a community, or just a belief that young people deserve a real seat at the table — we'd love to talk.</p>
+      <p>More soon.</p>
+
+      <div class="sign">
+        <strong>With love and momentum,<br>Adrienne + Heidi</strong><br>
+        Dream Tank Team<br><br>
+        <span style="color:#6b7280;">[Website] | [Instagram] | [LinkedIn] | [Contact]</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-label">💡 Flodesk Formatting Notes</div>
+    <p>The CTA blocks above map directly to Flodesk button blocks. Use their native button component — don't try to style it in the email body. The "[REPLAY LINK]" placeholders are where your button URLs go.</p>
+    <p>For the 1,300-person list that hasn't received consistent messaging: this email does double duty. It re-introduces Dream Tank <em>and</em> gives them a reason to engage. Keep the subject line curious, not salesy — these folks aren't expecting to hear from you.</p>
+  </div>
+</div>
+
+<!-- ━━━━━━━━━━━━━━━━ TIMESTAMPS ━━━━━━━━━━━━━━━━ -->
+<div class="section" id="timestamps">
+  <div class="section-badge">Replay Guide</div>
+  <h1>DreamCast Replay — Full Timestamps</h1>
+  <p class="subtitle">Built from the final edited transcript. These can be pasted into the email, dropped into the replay page, or used for social clips. Highlighted rows = the moments people will remember.</p>
+
+  <table class="ts-table">
+    <thead>
+      <tr>
+        <th style="width:100px">Time</th>
+        <th>Segment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="ts-time">00:00 – 00:03</td>
+        <td>
+          <div class="ts-title">Welcome & Intro</div>
+          <div class="ts-desc">Heidi introduces DreamCast and the vision behind Dream Tank — 10+ years of youth-led systems change.</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="ts-time">00:03 – 00:06</td>
+        <td>
+          <div class="ts-title">Hosts & Grounding</div>
+          <div class="ts-desc">Marina and Rebecca Irby (Nobel Peace Prize winner, Peak Institute) set the stage. The Heal → Dream → Build arc is introduced.</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="ts-time">00:06 – 00:10</td>
+        <td>
+          <div class="ts-title">How We Got Here</div>
+          <div class="ts-desc">Six Brown students joined Dream Tank's two-week Winternship — not as observers, but as co-creators.</div>
+        </td>
+      </tr>
+      <tr class="ts-highlight">
+        <td class="ts-time">00:10 – 00:18</td>
+        <td>
+          <div class="ts-title">🔥 Student Voices: Processing & Healing</div>
+          <div class="ts-desc">Content warning for gun violence discussion. Jenny, Amy, Sylvester, and Gavin share raw, real stories — fear, isolation, and ultimately the power of community. <strong style="color:#c4b5fd">Most powerful segment of the broadcast.</strong></div>
+        </td>
+      </tr>
+      <tr class="ts-highlight">
+        <td class="ts-time">00:18 – 00:25</td>
+        <td>
+          <div class="ts-title">🔥 Live Healing Session</div>
+          <div class="ts-desc">The room opens up. Audience members share feelings live. Charles (FEMA veteran) praises the students. A moment of collective exhale — and hope.</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="ts-time">00:25 – 00:31</td>
+        <td>
+          <div class="ts-title">Dream Tank's Story</div>
+          <div class="ts-desc">Heidi walks through 10 years — from a mom's dream to Davos, the White House, the UN, and now Dream Tank Kenya.</div>
+        </td>
+      </tr>
+      <tr class="ts-highlight">
+        <td class="ts-time">00:31 – 00:35</td>
+        <td>
+          <div class="ts-title">🔥 Jenny's Safety App Demo</div>
+          <div class="ts-desc">A real prototype: a campus emergency app built in days. Jenny demos it live — bridging the gap between student awareness and official channels.</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="ts-time">00:35 – 00:40</td>
+        <td>
+          <div class="ts-title">Dream Tank Kenya + Dreamer Montage</div>
+          <div class="ts-desc">The Kenya team shares their mission. A montage of community dreamers across ages share hopes, fears, and visions.</div>
+        </td>
+      </tr>
+      <tr class="ts-highlight">
+        <td class="ts-time">00:40 – 00:52</td>
+        <td>
+          <div class="ts-title">🔥 Mayor Laura Weinberg + City Vision</div>
+          <div class="ts-desc">Golden's mayor shares her dream for youth co-designing her city's future. Heidi reveals that Boulder and Providence mayors are in. <strong style="color:#c4b5fd">The civic partnership moment.</strong></div>
+        </td>
+      </tr>
+      <tr class="ts-highlight">
+        <td class="ts-time">00:52 – 01:02</td>
+        <td>
+          <div class="ts-title">🔥 Heal Dream Build Framework</div>
+          <div class="ts-desc">Gavin and Amy frame youth dreaming as a hero's journey. Sylvester presents the Heal Dream Build framework — a crisis-response model designed to be replicable. <strong style="color:#c4b5fd">The intellectual core.</strong></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="ts-time">01:02 – 01:09</td>
+        <td>
+          <div class="ts-title">Dreamer Montage Video</div>
+          <div class="ts-desc">Friends, family, community members share their dreams — water, kindness, equity, peace.</div>
+        </td>
+      </tr>
+      <tr class="ts-highlight">
+        <td class="ts-time">01:09 – 01:16</td>
+        <td>
+          <div class="ts-title">🔥 Live Tools & Platform Demo</div>
+          <div class="ts-desc">Heidi demos the interactive globe, systems mapping tool, and blueprint download. <strong style="color:#c4b5fd">Real, working prototypes anyone can use now.</strong></div>
+        </td>
+      </tr>
+      <tr class="ts-highlight">
+        <td class="ts-time">01:16 – 01:24</td>
+        <td>
+          <div class="ts-title">🔥 Youth-Powered Cities Blueprint</div>
+          <div class="ts-desc">Amy and Vikram present the integrated 3-layer model tested with three mayors. <strong style="color:#c4b5fd">The blueprint that cities can adopt.</strong></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="ts-time">01:24 – 01:30</td>
+        <td>
+          <div class="ts-title">Q&A + Favorite Moments</div>
+          <div class="ts-desc">Live audience questions. Margaret (League of Women Voters) speaks. Students share what mattered most.</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="ts-time">01:30 – 01:45</td>
+        <td>
+          <div class="ts-title">Closing + What's Next</div>
+          <div class="ts-desc">Adrian and Heidi close with gratitude and momentum. City labs are activating. The portal is live. The invitation is open.</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="tip-box">
+    <div class="tip-label">📌 Clip Suggestions for Social</div>
+    <p><strong style="color:#fff">00:13 – 00:18</strong> — Student voices. 90 seconds max. No music overlay. Let them speak.</p>
+    <p><strong style="color:#fff">00:40 – 00:45</strong> — Mayor Weinberg's first 90 seconds. "I envisioned something more."</p>
+    <p><strong style="color:#fff">01:16 – 01:20</strong> — Blueprint reveal. Quick, punchy. "Three mayors said yes."</p>
+  </div>
+</div>
+
+<!-- ━━━━━━━━━━━━━━━━ CHECKLIST ━━━━━━━━━━━━━━━━ -->
+<div class="section" id="checklist">
+  <div class="section-badge">Launch Checklist</div>
+  <h1>Send-Day Checklist</h1>
+  <p class="subtitle">Everything you need to do before and after hitting send. Check things off as you go.</p>
+
+  <h2>Before You Send</h2>
+  <div class="checklist">
+    <label><input type="checkbox"><span>Add the replay link (replace all [REPLAY LINK] placeholders)</span></label>
+    <label><input type="checkbox"><span>Add the calendar/ignition call links (replace [CALENDAR LINK])</span></label>
+    <label><input type="checkbox"><span>Confirm the 3 ignition call times work — put them in both emails</span></label>
+    <label><input type="checkbox"><span>Create the simple intake form (2 checkboxes: "City/community partner" + "Steward/can help fund")</span></label>
+    <label><input type="checkbox"><span>Test the Zoom email on yourself first — make sure links click through</span></label>
+    <label><input type="checkbox"><span>For Flodesk: map the CTA blocks to Flodesk button components</span></label>
+    <label><input type="checkbox"><span>Double-check your Flodesk list — any duplicates with the Zoom list? Remove them (don't send both)</span></label>
+  </div>
+
+  <h2>Send Order</h2>
+  <div class="tip-box">
+    <div class="tip-label">📤 Recommended Sequence</div>
+    <p><strong style="color:#fff">Day 1 (today or tomorrow):</strong> Send the Zoom attendee email. These are your warmest leads. Get it out first.</p>
+    <p><strong style="color:#fff">Day 2–3:</strong> Send the Flodesk blast. Stagger it so you're not sending 1,350 emails at once — Flodesk will handle this, but spacing them a day apart feels more intentional.</p>
+    <p><strong style="color:#fff">Day 2–3 (same window):</strong> Post 1–2 social clips (Instagram + LinkedIn) with the replay link. This is how you reach the ~250 YouTube watchers.</p>
+  </div>
+
+  <h2>After You Send</h2>
+  <div class="checklist">
+    <label><input type="checkbox"><span>Monitor replies for the first 24 hours — reply personally to anyone who responds</span></label>
+    <label><input type="checkbox"><span>Check who clicked the ignition call links — follow up with anyone who didn't book</span></label>
+    <label><input type="checkbox"><span>Post a social reminder 48 hours after the blast goes out</span></label>
+    <label><input type="checkbox"><span>Share the intake form link in any Slack/group chats where DreamCast was discussed</span></label>
+    <label><input type="checkbox"><span>Note open rates + click rates from Flodesk — this is your baseline for the list</span></label>
+  </div>
+
+  <h2>The Numbers You're Aiming For (Feb)</h2>
+  <div class="strategy-grid">
+    <div class="strategy-card">
+      <div class="card-num">TARGET</div>
+      <div class="card-title">12 Stewards</div>
+      <p>Intergenerational council members. Even 3–4 sign-ups this week is a win.</p>
+    </div>
+    <div class="strategy-card">
+      <div class="card-num">TARGET</div>
+      <div class="card-title">4 City Liaisons</div>
+      <p>One per pilot city. Golden may already be covered via Mayor Weinberg.</p>
+    </div>
+    <div class="strategy-card">
+      <div class="card-num">TARGET</div>
+      <div class="card-title">$33k Ignition Fund</div>
+      <p>First threshold. Each steward conversation is a chance to seed this.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('visible');
+  event.target.classList.add('active');
+}
+
+function copyEmail(id) {
+  const el = document.getElementById(id);
+  // Get just the text content, preserving line breaks
+  const lines = [];
+  el.querySelectorAll('.subj-line, p, .cta-block p, .cta-block .cta-sub, .sign, .sign strong, .sign span').forEach(node => {
+    const text = node.textContent.trim();
+    if (text && !lines.includes(text)) lines.push(text);
+  });
+
+  // Build a cleaner version
+  const bodyEl = document.getElementById(id);
+  const walker = document.createTreeWalker(bodyEl, NodeFilter.SHOW_TEXT, null, false);
+  let fullText = '';
+  while (walker.nextNode()) {
+    fullText += walker.currentNode.textContent;
+  }
+
+  navigator.clipboard.writeText(fullText.trim()).then(() => {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  });
+}
+</script>
+</body>
+</html>
